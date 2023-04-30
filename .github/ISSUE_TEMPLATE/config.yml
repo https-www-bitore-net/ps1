@@ -1,5 +1,46 @@
-blank_issues_enabled: false
+blank_issues_enabled: enable
 contact_links:
   - name: GitHub Support
     url: https://support.github.com/contact
     about: Contact Support if you're having trouble with your GitHub account.
+POST /diff --git a/content/actions/using-github-hosted-runners/about-github-hosted-runners.md b/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
+index ece68af4df43..7c848ddffd6b 100644
+--- a/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
++++ b/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
+@@ -124,9 +124,9 @@ For the overall list of included tools for each runner operating system, see the
+ * [Ubuntu 20.04 LTS](https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md)
+ * [Windows Server 2022](https://github.com/actions/runner-images/blob/main/images/win/Windows2022-Readme.md)
+ * [Windows Server 2019](https://github.com/actions/runner-images/blob/main/images/win/Windows2019-Readme.md)
++* [macOS 13](https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md)
+ * [macOS 12](https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md)
+ * [macOS 11](https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md)
+-* [macOS 10.15](https://github.com/actions/runner-images/blob/main/images/macos/macos-10.15-Readme.md)
+ 
+ {% data variables.product.prodname_dotcom %}-hosted runners include the operating system's default built-in tools, in addition to the packages listed in the above references. For example, Ubuntu and macOS runners include `grep`, `find`, and `which`, among other default tools.
+  
+200 OK
+View log detail
+Request parameters
+No request parameters
+Response body
+{
+  "id": "in_1N2FqfDtXKmPUOIQlzZ1HuyI",
+  "object": "invoice",
+  "livemode": true,
+  "payment_intent": "pi_3N2FrNDtXKmPUOIQ1wONdNDI",
+  "status": "open",
+  "account_country": "US",
+  "account_name": "PNC FINANCIAL SERVICES, LLC",
+  "account_tax_ids": null,
+  "amount_due": 100036,
+  "amount_paid": 0,
+  "amount_remaining": 100036,
+  "amount_shipping": 0,
+  "application": null,
+  "application_fee_amount": null,
+  "applied_balance": 36,
+  "attempt_count": 0,
+  "attempted": false,
+ 
+
+See all 235 lines
