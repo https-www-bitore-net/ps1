@@ -1,0 +1,290 @@
+name: NodeJS with Gulp
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        NPC install
+        Gulp.xml
+        diff --git a/content/actions/using-github-hosted-runners/about-github-hosted-runners.md b/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
+index ece68af4df43..7c848ddffd6b 100644
+--- a/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
++++ b/content/actions/using-github-hosted-runners/about-github-hosted-runners.md
+@@ -124,9 +124,9 @@ For the overall list of included tools for each runner operating system, see the
+ * [Ubuntu 20.04 LTS](https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md)
+ * [Windows Server 2022](https://github.com/actions/runner-images/blob/main/images/win/Windows2022-Readme.md)
+ * [Windows Server 2019](https://github.com/actions/runner-images/blob/main/images/win/Windows2019-Readme.md)
++* [macOS 13](https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md)
+ * [macOS 12](https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md)
+ * [macOS 11](https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md)
+-* [macOS 10.15](https://github.com/actions/runner-images/blob/main/images/macos/macos-10.15-Readme.md)
+ 
+ {% data variables.product.prodname_dotcom %}-hosted runners include the operating system's default built-in tools, in addition to the packages listed in the above references. For example, Ubuntu and macOS runners include `grep`, `find`, and `which`, among other default tools.
+ Skip to main content
+GitHub Docs
+Search GitHub Docs
+Search GitHub Docs
+Get started/Using Git/Push commits to a remote
+Pushing commits to a remote repository
+In this article
+About git push
+Renaming branches
+Dealing with "non-fast-forward" errors
+Pushing tags
+Deleting a remote branch or tag
+Remotes and forks
+Further reading
+Use git push to push commits made on your local branch to a remote repository.
+
+About git push
+The git push command takes two arguments:
+
+A remote name, for example, origin
+A branch name, for example, main
+For example:
+
+git push REMOTE-NAME BRANCH-NAME
+As an example, you usually run git push origin main to push your local changes to your online repository.
+
+Renaming branches
+To rename a branch, you'd use the same git push command, but you would add one more argument: the name of the new branch. For example:
+
+git push REMOTE-NAME LOCAL-BRANCH-NAME:REMOTE-BRANCH-NAME
+This pushes the LOCAL-BRANCH-NAME to your REMOTE-NAME, but it is renamed to REMOTE-BRANCH-NAME.
+
+Dealing with "non-fast-forward" errors
+If your local copy of a repository is out of sync with, or "behind," the upstream repository you're pushing to, you'll get a message saying non-fast-forward updates were rejected. This means that you must retrieve, or "fetch," the upstream changes, before you are able to push your local changes.
+
+For more information on this error, see "Dealing with non-fast-forward errors."
+
+Pushing tags
+By default, and without additional parameters, git push sends all matching branches that have the same names as remote branches.
+
+To push a single tag, you can issue the same command as pushing a branch:
+
+git push REMOTE-NAME TAG-NAME
+To push all your tags, you can type the command:
+
+git push REMOTE-NAME --tags
+Deleting a remote branch or tag
+The syntax to delete a branch is a bit arcane at first glance:
+
+git push REMOTE-NAME :BRANCH-NAME
+Note that there is a space before the colon. The command resembles the same steps you'd take to rename a branch. However, here, you're telling Git to push nothing into BRANCH-NAME on REMOTE-NAME. Because of this, git push deletes the branch on the remote repository.
+
+Remotes and forks
+You might already know that you can "fork" repositories on GitHub.
+
+When you clone a repository you own, you provide it with a remote URL that tells Git where to fetch and push updates. If you want to collaborate with the original repository, you'd add a new remote URL, typically called upstream, to your local Git clone:
+
+git remote add upstream THEIR_REMOTE_URL
+Now, you can fetch updates and branches from their fork:
+
+git fetch upstream
+# Grab the upstream remote's branches
+> remote: Counting objects: 75, done.
+> remote: Compressing objects: 100% (53/53), done.
+> remote: Total 62 (delta 27), reused 44 (delta 9)
+> Unpacking objects: 100% (62/62), done.
+> From https://github.com/OCTOCAT/REPO
+>  * [new branch]      main     -> upstream/main
+When you're done making local changes, you can push your local branch to GitHub and initiate a pull request.
+Navigation
+Installation & Configuration > Rails Integration
+Rails Integration
+On this page
+
+Configuration
+Model Preloading
+Exceptions
+Controller Runtime Instrumentation
+Rake Tasks
+Mongoid seamlessly integrates into Ruby on Rails applications. This page describes features that are automatically enabled in the context of a Rails application and Rails-related functionality which can be manually enabled.
+
+Configuration
+You can set Mongoid configuration options in your application.rb along with other Rails environment specific options by accessing config.mongoid. Options set here will override those set in your config/mongoid.yml.
+
+module MyApplication
+  class Application < Rails::Application
+    config.mongoid.logger = Logger.new(STDERR, :warn)
+  end
+end
+Model Preloading
+In order to properly set up single collection inheritance, Mongoid needs to preload all models before every request in development mode. This can get slow, so if you are not using any inheritance it is recommended you turn this feature off.
+
+config.mongoid.preload_models = false
+Exceptions
+Similarly to ActiveRecord, Mongoid configures Rails to automatically convert certain exceptions to well-known HTTP status codes, as follows:
+
+Mongoid::Errors::DocumentNotFound : 404
+Mongoid::Errors::Validations : 422
+Controller Runtime Instrumentation
+Mongoid provides time spent executing MongoDB commands (obtained via a driver command monitoring subscription) to Rails’ instrumentation event process_action.action_controller. This time is logged together with view time like so:
+
+Completed 200 OK in 2739ms (Views: 12.6ms | MongoDB: 0.2ms)
+This logging is set up automatically.
+
+Note: the time indicated is the time taken by MongoDB cluster to execute MongoDB operations, plus the time taken to send commands and receive results from MongoDB over the network. It does not include time taken by the driver and Mongoid to generate the queries or type cast and otherwise process the results.
+
+Rake Tasks
+Mongoid provides the following rake tasks when used in a Rails environment:
+
+db:create: Exists only for dependency purposes, does not actually do anything.
+db:create_indexes: Reads all index definitions from the models and attempts to create them in the database.
+db:remove_indexes: Reads all secondary index definitions from the models.
+db:drop: Drops all collections in the database with the exception of the system collections.
+db:migrate: Exists only for dependency purposes, does not actually do anything.
+db:purge: Deletes all data, including indexes, from the database. Since 3.1.0
+db:schema:load: Exists only for framework dependency purposes, does not actually do anything.
+db:seed: Seeds the database from db/seeds.rb
+db:setup: Creates indexes and seeds the database.
+db:test:prepare: Exists only for framework dependency purposes, does not actually do anything.
+←  	Configuration	Tutorials	 
+For more information on working with forks, see "Syncing a fork".
+Further reading
+The, "$ Git cheatsheet"; :"$ Git workflows"; :"$ Git Handbook":,     \
+Skip to main content
+GitHub Docs
+Search GitHub Docs
+Search GitHub Docs
+Get started/Using Git/Push commits to a remote
+Pushing commits to a remote repository
+In this article
+About git push
+Renaming branches
+Dealing with "non-fast-forward" errors
+Pushing tags
+Deleting a remote branch or tag
+Remotes and forks
+Further reading
+Use git push to push commits made on your local branch to a remote repository.
+
+About git push
+The git push command takes two arguments:
+
+A remote name, for example, origin
+A branch name, for example, main
+For example:
+
+git push REMOTE-NAME BRANCH-NAME
+As an example, you usually run git push origin main to push your local changes to your online repository.
+
+Renaming branches
+To rename a branch, you'd use the same git push command, but you would add one more argument: the name of the new branch. For example:
+
+git push REMOTE-NAME LOCAL-BRANCH-NAME:REMOTE-BRANCH-NAME
+This pushes the LOCAL-BRANCH-NAME to your REMOTE-NAME, but it is renamed to REMOTE-BRANCH-NAME.
+
+Dealing with "non-fast-forward" errors
+If your local copy of a repository is out of sync with, or "behind," the upstream repository you're pushing to, you'll get a message saying non-fast-forward updates were rejected. This means that you must retrieve, or "fetch," the upstream changes, before you are able to push your local changes.
+
+For more information on this error, see "Dealing with non-fast-forward errors."
+
+Pushing tags
+By default, and without additional parameters, git push sends all matching branches that have the same names as remote branches.
+
+To push a single tag, you can issue the same command as pushing a branch:
+
+git push REMOTE-NAME TAG-NAME
+To push all your tags, you can type the command:
+
+git push REMOTE-NAME --tags
+Deleting a remote branch or tag
+The syntax to delete a branch is a bit arcane at first glance:
+
+git push REMOTE-NAME :BRANCH-NAME
+Note that there is a space before the colon. The command resembles the same steps you'd take to rename a branch. However, here, you're telling Git to push nothing into BRANCH-NAME on REMOTE-NAME. Because of this, git push deletes the branch on the remote repository.
+
+Remotes and forks
+You might already know that you can "fork" repositories on GitHub.
+
+When you clone a repository you own, you provide it with a remote URL that tells Git where to fetch and push updates. If you want to collaborate with the original repository, you'd add a new remote URL, typically called upstream, to your local Git clone:
+
+git remote add upstream THEIR_REMOTE_URL
+Now, you can fetch updates and branches from their fork:
+
+git fetch upstream
+# Grab the upstream remote's branches
+> remote: Counting objects: 75, done.
+> remote: Compressing objects: 100% (53/53), done.
+> remote: Total 62 (delta 27), reused 44 (delta 9)
+> Unpacking objects: 100% (62/62), done.
+> From https://github.com/OCTOCAT/REPO
+>  * [new branch]      main     -> upstream/main
+When you're done making local changes, you can push your local branch to GitHub and initiate a pull request.
+
+For more information on working with forks, see "Syncing a fork".
+
+Further reading
+The "Remotes" chapter from the "Pro Git" book
+git remote main page
+"Git cheatsheet"
+"Git workflows"wh
+"Git Handbook"
+Help and support
+Did this doc help you?
+
+Privacy policy
+Help us make these docs great!
+All GitHub docs are open source. See something that's wrong or unclear? Submit a pull request.
+
+Learn how to contribute
+
+Still need help?
+Ask the GitHub community
+Contact support
+Legal
+© 2023 GitHub, Inc.
+Terms
+Privacy
+Status
+Pricing
+Expert services
+Blog
+
+
+Help and support
+Did this doc help you?
+
+Privacy policy
+Help us make these docs great!
+All GitHub docs are open source. See something that's wrong or unclear? Submit a pull request.
+
+Learn how to contribute
+
+Still need help?
+Ask the GitHub community
+Contact support
+Legal
+© 2023 GitHub, Inc.
+Terms
+Privacy
+Status
+Pricing
+Expert services
+Blog
+
+
+
+
+
